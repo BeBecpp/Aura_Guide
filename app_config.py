@@ -1,0 +1,6 @@
+APP_NAME = "AURA GUIDE"
+APP_SUBTITLE = "Smart Assistive Hat"
+TAGLINE = "Саадыг түрүүлж мэдэрнэ"
+VERSION = "1.0.0"
+BLUETOOTH_DEVICE_NAME = "HC-05"
+DATA_PROTOCOL_EXAMPLE = "F:80,L:150,R:45,B:200"
