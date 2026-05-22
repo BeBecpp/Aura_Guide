@@ -30,20 +30,23 @@
   <img src="https://img.shields.io/badge/Bluetooth-HC--05%20%7C%20BLE-0082FC?style=flat-square&logo=bluetooth"/>
   <img src="https://img.shields.io/badge/Voice-Mongolian%20Warning-8B5CF6?style=flat-square"/>
   <img src="https://img.shields.io/badge/Status-Prototype-FFC857?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Focus-Accessibility-0EA5A1?style=flat-square"/>
 </p>
 
 ---
 
-## ✨ Overview
+## Overview
 
-**AURA GUIDE** is a smart assistive wearable prototype designed to help visually impaired users detect nearby obstacles around the upper body/head level.
+**AURA GUIDE** is a smart assistive wearable prototype designed to help visually impaired users detect nearby obstacles around the upper body and head level.
 
-The system uses **ultrasonic sensors** mounted on a hat/helmet to detect obstacles in four directions:
+The system uses **ultrasonic sensors** mounted on a hat or helmet to detect obstacles in four directions:
 
-- **Front** — Урд
-- **Left** — Зүүн
-- **Right** — Баруун
-- **Back** — Ард
+| Direction | Монгол |
+|---|---|
+| Front | Урд |
+| Left | Зүүн |
+| Right | Баруун |
+| Back | Ард |
 
 Sensor data is sent to a mobile app through Bluetooth. The app analyzes the nearest obstacle and gives **Mongolian voice warnings** such as:
 
@@ -53,45 +56,102 @@ Sensor data is sent to a mobile app through Bluetooth. The app analyzes the near
 Зүүн талд маш ойр саад байна
 ```
 
-> ⚠️ AURA GUIDE is a prototype and concept demonstration. It is not a certified medical/safety device and should not replace a white cane, guide dog, or human assistance.
+> AURA GUIDE is a prototype and concept demonstration. It is not a certified medical or safety device and should not replace a white cane, guide dog, or human assistance.
 
 ---
 
-## 🌟 Key Features
+## Why I Built It
+
+I wanted to build a project that connects engineering with a real human problem.
+
+Many assistive devices are expensive, not localized, or not designed with Mongolian language support. AURA GUIDE explores whether a simple wearable system can give obstacle warnings through sensors, Bluetooth communication, and local-language voice feedback.
+
+This project helped me think about more than code:
+
+- hardware and software working together
+- real-time sensor data
+- Bluetooth communication
+- warning prioritization
+- accessibility-focused UX
+- Mongolian voice feedback
+- safety limitations
+- demo-ready engineering
+
+AURA GUIDE is one of my most important projects because it combines **hardware, mobile software, accessibility, product thinking, and real-world impact**.
+
+---
+
+## The Problem
+
+For visually impaired people, moving through unfamiliar or crowded spaces can be difficult and risky.
+
+Common challenges include:
+
+| Challenge | Why It Matters |
+|---|---|
+| Obstacles near head or upper body | A white cane may not detect higher objects |
+| Crowded environments | Users may need faster directional awareness |
+| Expensive assistive devices | Many advanced devices are not affordable |
+| Lack of local language support | Voice feedback should be understandable |
+| Complex devices | Assistive tools should be simple and reliable |
+
+AURA GUIDE does not try to replace existing mobility tools.  
+It is designed as an **extra awareness layer**.
+
+---
+
+## The Solution
+
+AURA GUIDE is a smart assistive hat prototype.
+
+It uses:
+
+- **4 ultrasonic sensors** for obstacle detection
+- **Arduino Uno or ESP32** as the controller
+- **HC-05 Bluetooth or ESP32 BLE** for communication
+- **Mobile app dashboard** for status and warning display
+- **Mongolian voice warning** through phone or Bluetooth earphones
+- **Warning engine** that chooses the nearest valid obstacle
+
+---
+
+## Key Features
 
 | Feature | Description |
 |---|---|
-| 🧭 4-direction sensing | Detects obstacles in front, left, right, and back |
-| 📡 Bluetooth communication | Arduino/ESP32 sends real-time distance data to the app |
-| 🔊 Voice warning | App warns the user with Mongolian voice feedback |
-| 📱 Mobile dashboard | Shows distance values and current warning status |
-| 🎨 Branded UI | Healthcare-friendly AURA GUIDE theme and logo |
-| 🌙 Light/Dark theme | UI supports both dark and light design modes |
-| 🧠 Warning engine | Chooses nearest obstacle and severity level |
-| 🧪 Demo-ready prototype | Suitable for school, university, engineering, and innovation demos |
+| 4-direction sensing | Detects obstacles in front, left, right, and back |
+| Bluetooth communication | Arduino/ESP32 sends real-time distance data to the app |
+| Mongolian voice warning | App warns the user with local-language audio feedback |
+| Mobile dashboard | Shows distance values and current warning status |
+| Warning engine | Chooses nearest obstacle and severity level |
+| Distance filtering | Ignores invalid or unsafe sensor readings |
+| Light/Dark theme | UI supports both dark and light modes |
+| Branded UI | Healthcare-friendly AURA GUIDE visual identity |
+| Demo-ready prototype | Suitable for school, engineering, and innovation demos |
+| iOS path | ESP32 BLE version planned for iPhone compatibility |
 
 ---
 
-## 🦋 Butterfly System Scheme
+## Butterfly System Scheme
 
 This diagram shows the whole project as a “butterfly style” architecture: hardware on the left wing, mobile/audio feedback on the right wing, and the Bluetooth protocol as the center body.
 
 ```mermaid
 flowchart LR
-    subgraph LEFT_WING["🦋 Sensor Wing"]
+    subgraph LEFT_WING["Sensor Wing"]
         F["Front Sensor<br/>HC-SR04"]
         L["Left Sensor<br/>HC-SR04"]
         R["Right Sensor<br/>HC-SR04"]
         B["Back Sensor<br/>HC-SR04"]
     end
 
-    subgraph BODY["⚙️ Controller Body"]
+    subgraph BODY["Controller Body"]
         MCU["Arduino Uno / ESP32"]
         FILTER["Distance Filter<br/>Smoothing + Invalid Ignore"]
         FORMAT["Data Protocol<br/>F:80,L:150,R:45,B:200"]
     end
 
-    subgraph RIGHT_WING["📱 Feedback Wing"]
+    subgraph RIGHT_WING["Feedback Wing"]
         APP["AURA GUIDE App"]
         ENGINE["Warning Engine<br/>Nearest Obstacle"]
         TTS["Mongolian Voice Warning"]
@@ -113,7 +173,7 @@ flowchart LR
 
 ---
 
-## 🧱 System Architecture
+## System Architecture
 
 ```mermaid
 flowchart TD
@@ -128,7 +188,33 @@ flowchart TD
 
 ---
 
-## 🔌 Hardware Components
+## Runtime Data Flow
+
+```mermaid
+sequenceDiagram
+    participant S as Sensors
+    participant M as Arduino / ESP32
+    participant B as Bluetooth
+    participant A as Mobile App
+    participant P as Parser
+    participant W as Warning Engine
+    participant V as Voice Output
+    participant U as User
+
+    S->>M: Measure distances
+    M->>M: Filter invalid values
+    M->>B: Send F,L,R,B data
+    B->>A: Bluetooth data stream
+    A->>P: Parse distance values
+    P->>W: Valid direction-distance map
+    W->>W: Select nearest obstacle
+    W->>V: Generate Mongolian warning
+    V->>U: Play voice alert
+```
+
+---
+
+## Hardware Components
 
 | Component | Quantity | Purpose |
 |---|---:|---|
@@ -146,9 +232,9 @@ flowchart TD
 
 ---
 
-## 🧩 Wiring Scheme — Arduino Uno + HC-05
+## Wiring Scheme — Arduino Uno + HC-05
 
-> This is the Android MVP version using HC-05 Bluetooth Classic.
+This is the Android MVP version using HC-05 Bluetooth Classic.
 
 ### Sensor Pin Table
 
@@ -168,7 +254,7 @@ flowchart TD
 | TXD | Arduino RX |
 | RXD | Arduino TX through voltage divider |
 
-> ⚠️ HC-05 RX pin is 3.3V logic. Use a voltage divider between Arduino TX and HC-05 RX.
+> HC-05 RX pin is 3.3V logic. Use a voltage divider between Arduino TX and HC-05 RX.
 
 ### ASCII Wiring Diagram
 
@@ -201,9 +287,11 @@ flowchart TD
 
 ---
 
-## 🍎 iPhone / ESP32 BLE Version
+## iPhone / ESP32 BLE Version
 
-iPhone apps cannot reliably use **HC-05 Bluetooth Classic SPP** like Android. For iOS, the recommended setup is:
+iPhone apps cannot reliably use **HC-05 Bluetooth Classic SPP** like Android.
+
+For iOS, the recommended setup is:
 
 ```text
 4x HC-SR04 → ESP32 → BLE → iPhone App
@@ -223,7 +311,7 @@ F:80,L:150,R:45,B:200
 
 ---
 
-## 📡 Data Protocol
+## Data Protocol
 
 Arduino / ESP32 sends one line of text:
 
@@ -231,7 +319,7 @@ Arduino / ESP32 sends one line of text:
 F:80,L:150,R:45,B:200
 ```
 
-### Meaning
+### Direction Keys
 
 | Key | Direction | Монгол |
 |---|---|---|
@@ -255,7 +343,13 @@ This means:
 | Right | 45 cm |
 | Back | 200 cm |
 
-The nearest obstacle is **Right = 45 cm**, so the app should warn:
+The nearest obstacle is:
+
+```text
+Right = 45 cm
+```
+
+So the app should warn:
 
 ```text
 Баруун талд ойр саад байна
@@ -263,7 +357,7 @@ The nearest obstacle is **Right = 45 cm**, so the app should warn:
 
 ---
 
-## 🚨 Warning Logic
+## Warning Logic
 
 AURA GUIDE selects the **nearest valid obstacle** and generates the warning message.
 
@@ -277,7 +371,7 @@ AURA GUIDE selects the **nearest valid obstacle** and generates the warning mess
 
 ### Priority Rule
 
-If multiple sensors detect obstacles at the same time, AURA GUIDE chooses the **nearest distance**.
+If multiple sensors detect obstacles at the same time, AURA GUIDE chooses the nearest valid distance.
 
 ```text
 Input:
@@ -292,13 +386,29 @@ Output:
 
 ---
 
-## 📱 Mobile App Screens
+## Warning Engine Logic
+
+```mermaid
+flowchart TD
+    INPUT["Bluetooth Data<br/>F:90,L:40,R:70,B:200"] --> PARSE["Parse Direction Values"]
+    PARSE --> VALID["Remove Invalid / Zero Values"]
+    VALID --> NEAREST["Find Nearest Distance"]
+    NEAREST --> LEVEL["Decide Severity Level"]
+    LEVEL --> MESSAGE["Build Mongolian Warning"]
+    MESSAGE --> AUDIO["Play Voice Alert"]
+```
+
+---
+
+## Mobile App Screens
 
 ### 1. Splash / Loading Screen
 
-- Shows AURA GUIDE logo
-- Shows tagline
-- Healthcare-style loading experience
+Shows:
+
+- AURA GUIDE logo
+- tagline
+- healthcare-style loading experience
 
 ```text
 AURA GUIDE
@@ -311,10 +421,10 @@ Smart Assistive Hat
 Shows:
 
 - Bluetooth status
-- Current warning
+- current warning
 - 4 sensor cards
-- Connect / Disconnect
-- Settings
+- connect / disconnect
+- settings
 
 ```text
 AURA GUIDE                          LIVE
@@ -340,28 +450,22 @@ HC-05 холбогдсон
 
 Includes:
 
-- Light / Dark theme
-- Audio volume
-- Warning sensitivity
+- light / dark theme
+- audio volume
+- warning sensitivity
 - Bluetooth status
-- App info
+- app info
 
 ---
 
-## 🎨 Brand Identity
+## Brand Identity
 
 ### Logo
 
-Place your logo here:
+Recommended logo path:
 
 ```text
 assets/logo.png
-```
-
-or:
-
-```text
-logo.png
 ```
 
 Recommended app icon:
@@ -384,7 +488,22 @@ assets/app_icon.png
 
 ---
 
-## 📂 Project Structure
+## Tech Stack
+
+| Area | Tools / Concepts |
+|---|---|
+| Hardware | Arduino Uno, ESP32, HC-SR04 sensors |
+| Communication | HC-05 Bluetooth Classic, ESP32 BLE |
+| Mobile App | Python, Kivy |
+| Android Build | Buildozer |
+| Warning Logic | Parser, warning engine, severity levels |
+| Audio | Mongolian voice feedback / TTS |
+| UI | Light/Dark dashboard, sensor cards |
+| Prototype Type | Assistive wearable technology |
+
+---
+
+## Project Structure
 
 ```text
 aura_guide_app/
@@ -411,7 +530,7 @@ aura_guide_app/
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Run on PC
 
@@ -441,7 +560,7 @@ cp bin/*.apk /mnt/d/bebe_personal/
 
 ---
 
-## 🤖 Arduino / ESP32 Output Test
+## Arduino / ESP32 Output Test
 
 Before using the app, confirm your board prints data like this:
 
@@ -454,22 +573,23 @@ F:85,L:150,R:45,B:200
 If the app does not update, check:
 
 - Bluetooth pairing
-- Correct data format
-- Newline at the end of each line
-- App permissions
+- correct data format
+- newline at the end of each line
+- app permissions
 - HC-05 baud rate
-- Sensor power wiring
+- sensor power wiring
+- stable battery/power supply
 
 ---
 
-## 🔒 Security Notes
+## Security Notes
 
 AURA GUIDE does not require:
 
-- User login
-- Cloud server
-- Internet data upload
-- Personal database
+- user login
+- cloud server
+- internet data upload
+- personal database
 
 Security recommendations:
 
@@ -482,7 +602,7 @@ Security recommendations:
 
 ---
 
-## 🧪 Testing Checklist
+## Testing Checklist
 
 ### Hardware
 
@@ -529,24 +649,25 @@ Security recommendations:
 
 ---
 
-## 🛡️ Safety Disclaimer
+## Safety Disclaimer
 
 AURA GUIDE is a prototype assistive technology project.
 
-It **does not** replace:
+It does **not** replace:
 
-- White cane
-- Guide dog
-- Human guide
-- Medical/safety-certified mobility device
+- white cane
+- guide dog
+- human guide
+- medical/safety-certified mobility device
 
 Limitations:
 
-- Ultrasonic sensors may fail on soft, angled, thin, or glass surfaces
-- Stairs, holes, and low obstacles may not be detected reliably
-- Sensor angle and mounting quality affect accuracy
-- Bluetooth connection may disconnect
-- Battery/power issues can stop the system
+- Ultrasonic sensors may fail on soft, angled, thin, or glass surfaces.
+- Stairs, holes, and low obstacles may not be detected reliably.
+- Sensor angle and mounting quality affect accuracy.
+- Bluetooth connection may disconnect.
+- Battery or power issues can stop the system.
+- The prototype should be used only for demos and controlled testing.
 
 Recommended demo explanation:
 
@@ -556,33 +677,24 @@ Recommended demo explanation:
 
 ---
 
-## 🗺️ Roadmap
+## Demo Flow
 
-- [ ] Better enclosure / 3D printed sensor holders
-- [ ] ESP32 BLE version for iPhone
-- [ ] Vibration feedback
-- [ ] Battery level indicator
-- [ ] Emergency button
-- [ ] GPS location sharing
-- [ ] Fall detection
-- [ ] Camera + AI object detection
-- [ ] Offline voice pack
-- [ ] Release signed APK
+Recommended demo flow:
 
----
-
-## 👥 Team Roles
-
-| Role | Responsibility |
+| Step | What to Show |
 |---|---|
-| Hardware Engineer | Sensor wiring, mounting, power |
-| Firmware Developer | Arduino/ESP32 code, sensor logic |
-| Mobile App Developer | App UI, Bluetooth, warning engine |
-| Testing Support | Test log, demo, documentation |
+| 1 | Explain the accessibility problem |
+| 2 | Show the hat / sensor concept |
+| 3 | Show Arduino or ESP32 sending data |
+| 4 | Show Bluetooth connection |
+| 5 | Show mobile dashboard updating |
+| 6 | Move obstacle near one direction |
+| 7 | Trigger Mongolian voice warning |
+| 8 | Explain safety limitation and future plan |
 
 ---
 
-## 🎤 Demo Script
+## Demo Script
 
 ```text
 Манай төслийн нэр AURA GUIDE.
@@ -607,7 +719,90 @@ Bluetooth чихэвчээр Монгол хэлээр анхааруулга ө
 
 ---
 
-## ⭐ Support This Project
+## What I Learned
+
+While building AURA GUIDE, I learned that assistive technology needs careful design.
+
+The hardest parts were:
+
+- thinking about real user safety
+- deciding which obstacle should be prioritized
+- parsing real-time Bluetooth data
+- designing warning severity levels
+- making feedback simple and understandable
+- thinking about local language support
+- connecting hardware, software, and UX together
+- explaining limitations honestly
+
+This project helped me understand that engineering is not only about building something impressive.  
+It is also about building something useful, understandable, and human.
+
+---
+
+## Current Limitations
+
+| Limitation | Future Fix |
+|---|---|
+| Prototype concept stage | Build a stronger physical prototype |
+| Limited hardware testing | Test with real sensors more consistently |
+| Basic warning logic | Add better smoothing and calibration |
+| Bluetooth may disconnect | Add reconnect logic and status alerts |
+| No full iOS app yet | Build ESP32 BLE version |
+| No vibration feedback yet | Add haptic motor warnings |
+| Limited user testing | Get feedback from accessibility groups |
+| Voice feedback can improve | Add offline Mongolian voice pack |
+
+---
+
+## Roadmap
+
+- [ ] Better enclosure / 3D printed sensor holders
+- [ ] ESP32 BLE version for iPhone
+- [ ] Vibration feedback
+- [ ] Battery level indicator
+- [ ] Emergency button
+- [ ] GPS location sharing
+- [ ] Fall detection
+- [ ] Camera + AI object detection
+- [ ] Offline voice pack
+- [ ] Release signed APK
+- [ ] Real-world testing in controlled environments
+- [ ] Accessibility feedback from real users
+
+---
+
+## Team Roles
+
+| Role | Responsibility |
+|---|---|
+| Hardware Engineer | Sensor wiring, mounting, power |
+| Firmware Developer | Arduino/ESP32 code, sensor logic |
+| Mobile App Developer | App UI, Bluetooth, warning engine |
+| Testing Support | Test log, demo, documentation |
+
+---
+
+## Portfolio Summary
+
+AURA GUIDE is a smart assistive wearable prototype for visually impaired users.
+
+It demonstrates:
+
+- hardware/software integration
+- Bluetooth communication
+- real-time sensor parsing
+- warning engine design
+- Mongolian voice feedback
+- accessibility-focused UX
+- mobile app dashboard design
+- safety-aware product thinking
+- real-world engineering documentation
+
+This project represents my interest in building technology that is not only smart, but also useful, local, and human.
+
+---
+
+## Support This Project
 
 If you like this project:
 
